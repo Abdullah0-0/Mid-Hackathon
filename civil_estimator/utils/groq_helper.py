@@ -13,6 +13,15 @@ SYSTEM_PROMPT = (
     "Keep answers concise and practical."
 )
 
+# Tried in order. Groq periodically retires older models, so if the first
+# choice returns an error (e.g. decommissioned), the next one is tried
+# automatically instead of the AI tab just breaking.
+MODEL_FALLBACKS = [
+    "llama-3.3-70b-versatile",
+    "openai/gpt-oss-120b",
+    "llama-3.1-8b-instant",
+]
+
 
 def get_groq_client():
     api_key = st.secrets.get("GROQ_API_KEY", None)
@@ -34,13 +43,18 @@ def ask_groq(user_question: str, context: str = "") -> str:
         messages.append({"role": "system", "content": f"Current calculation context:\n{context}"})
     messages.append({"role": "user", "content": user_question})
 
-    try:
-        response = client.chat.completions.create(
-            model="openai/gpt-oss-120b",  # check console.groq.com for current available models
-            messages=messages,
-            temperature=0.4,
-            max_tokens=500,
-        )
-        return response.choices[0].message.content
-    except Exception as e:
-        return f"⚠️ Groq API error: {e}"
+    last_error = None
+    for model in MODEL_FALLBACKS:
+        try:
+            response = client.chat.completions.create(
+                model=model,
+                messages=messages,
+                temperature=0.4,
+                max_tokens=500,
+            )
+            return response.choices[0].message.content
+        except Exception as e:
+            last_error = e
+            continue  # try the next model in the fallback list
+
+    return f"⚠️ Groq API error: {last_error}"

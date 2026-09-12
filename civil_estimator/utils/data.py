@@ -48,3 +48,9 @@ CONCRETE_RATIOS = {
 
 # --- Common steel bar diameters (mm) ---
 STEEL_BAR_SIZES_MM = [6, 8, 10, 12, 16, 20, 25]
+
+# --- Currency label for the optional cost-estimate fields ---
+# This does NOT affect any quantity calculation above — it's only used to
+# label the optional "unit rate" inputs in the UI. Change it if your rates
+# are in a different currency.
+CURRENCY_SYMBOL = "Rs."
