@@ -11,13 +11,6 @@ Hackathon MVP — calculates material quantities, with an *optional* rough cost 
 - **Project / BOQ** — add results from any module into a running project list, see grand totals, export one combined CSV
 - AI Assistant (Groq) — chat-style, explains formulas, mix ratios, and your last result
 
-## What's new in this UI pass
-- Themed layout (custom sidebar/colors, hero banners) via `utils/style.py`
-- Optional **cost estimate**: each module has a collapsed "unit rate" section (defaults to 0 = skipped) — nothing assumes prices, you enter your own local rates
-- **Project / BOQ cart**: add any calculation to a running list, see combined totals across items, download everything as one CSV
-- Per-result **CSV download** and a small material-volume **bar chart** on each module
-- **AI Assistant** is now a proper chat (history + `st.chat_input`), and automatically falls back to a different Groq model if the configured one is retired
-- Clicking a module card on the Home page jumps straight to that calculator
 
 ## Project structure
 ```
